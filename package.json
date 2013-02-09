@@ -2,27 +2,27 @@
   "name": "connect-injector",
   "description": "A middleware to inject text into static or proxied requests.",
   "version": "0.1.0",
-  "homepage": "https://github.com/daff/connect-injector",
+  "homepage": "https://github.com/daffl/connect-injector",
   "author": {
     "name": "David Luecke",
     "email": "daff@neyeon.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/daff/connect-injector.git"
+    "url": "git://github.com/daffl/connect-injector.git"
   },
   "bugs": {
-    "url": "https://github.com/daff/connect-injector/issues"
+    "url": "https://github.com/daffl/connect-injector/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/daff/connect-injector/blob/master/LICENSE-MIT"
+      "url": "https://github.com/daffl/connect-injector/blob/master/LICENSE-MIT"
     }
   ],
   "main": "lib/connect-injector",
   "engines": {
-    "node": ">= 0.6.0"
+    "node": ">= 0.8.0"
   },
   "dependencies": {
     "connect": "2.7.2",
@@ -31,5 +31,5 @@
   "scripts": {
     "test": "npm test"
   },
-  "keywords": []
+  "keywords": [ 'connect', 'middleware', 'http' ]
 }
