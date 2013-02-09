@@ -31,5 +31,5 @@
   "scripts": {
     "test": "npm test"
   },
-  "keywords": [ 'connect', 'middleware', 'http' ]
+  "keywords": [ "connect", "middleware", "http" ]
 }
