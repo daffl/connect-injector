@@ -1,34 +1,24 @@
-var connect_injector = require('../lib/connect-injector.js');
+var connect = require('connect');
+var _ = require('underscore');
+var httpProxy = require('http-proxy');
+var proxy = new httpProxy.RoutingProxy();
+var injector = require('./../lib/connect-injector');
+var url = require('url');
 
-/*
-  ======== A Handy Little Nodeunit Reference ========
-  https://github.com/caolan/nodeunit
+var inject = injector(function(req, res) {
+	var isJSON = res.getHeader('content-type').indexOf('application/json') !== -1;
+	return isJSON && req.query.callback;
+}, function(callback, data, req) {
+	callback(null, req.query.callback + '(' + data.toString() + ')');
+});
 
-  Test methods:
-    test.expect(numAssertions)
-    test.done()
-  Test assertions:
-    test.ok(value, [message])
-    test.equal(actual, expected, [message])
-    test.notEqual(actual, expected, [message])
-    test.deepEqual(actual, expected, [message])
-    test.notDeepEqual(actual, expected, [message])
-    test.strictEqual(actual, expected, [message])
-    test.notStrictEqual(actual, expected, [message])
-    test.throws(block, [error], [message])
-    test.doesNotThrow(block, [error], [message])
-    test.ifError(value)
-*/
-
-exports['awesome'] = {
-  setUp: function(done) {
-    // setup here
-    done();
-  },
-  'no args': function(test) {
-    test.expect(1);
-    // tests here
-    test.equal(connect_injector.awesome(), 'awesome', 'should be awesome.');
-    test.done();
-  }
-};
+connect().use(connect.query())
+.use(inject)
+.use('/proxy', function (req, res) {
+	proxy.proxyRequest(req, res, {
+		host: 'localhost',
+		port: 80
+	});
+})
+.use('/static', connect.static(__dirname)).listen(8000)
+.listen(8000);
