@@ -4,8 +4,8 @@ var request = require('request');
 var injector = require('./../lib/connect-injector');
 
 describe('connect-injector', function () {
-	it('does not mess with passed requests', function (done) {
-		var rewriter = injector(function (req, res) {
+	it('does not mess with normal requests', function (done) {
+		var rewriter = injector(function () {
 			return false;
 		}, function () {
 			done('Should never be called');
@@ -95,7 +95,77 @@ describe('connect-injector', function () {
 		});
 	});
 
-	it.skip('chains injectors', function (done) {
-		// TODO
+	it('allows more than one injector', function (done) {
+		var OBJ = { hello: 'people' };
+		var REWRITTEN = 'Re-written stuff';
+
+		var rewriter = injector(function (req, res) {
+			return res.getHeader('content-type').indexOf('text/plain') === 0
+		}, function (callback) {
+			callback(null, REWRITTEN);
+		});
+
+		var jsonp = injector(function(req, res) {
+			var isJSON = res.getHeader('content-type').indexOf('application/json') === 0;
+			return isJSON && req.query.callback;
+		}, function(callback, data, req) {
+			callback(null, req.query.callback + '(' + data.toString() + ')');
+		});
+
+		var app = connect().use(connect.query()).use(jsonp).use(rewriter)
+			.use('/plain', function (req, res) {
+				res.writeHead(200, { 'Content-Type': 'text/plain' });
+				res.end('Hello world\n');
+			}).use('/jsonp', function(req, res) {
+				res.writeHead(200, { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify(OBJ));
+			});
+
+		var server = app.listen(9999).on('listening', function () {
+			// Plain request
+			request('http://localhost:9999/plain', function (error, response, body) {
+				should.not.exist(error);
+				response.headers['content-type'].should.equal('text/plain');
+				body.should.equal(REWRITTEN);
+				// JSONP request
+				request('http://localhost:9999/jsonp?callback=stuff', function (error, response, body) {
+					should.not.exist(error);
+					response.headers['content-type'].should.equal('application/json');
+					body.should.equal('stuff(' + JSON.stringify(OBJ) + ')');
+					server.close();
+					done();
+				});
+			});
+		});
+	});
+
+	it('chains injectors', function(done) {
+		var first = injector(function () {
+			return true;
+		}, function (callback, data) {
+			callback(null, data.toString() + ' first');
+		});
+
+		var second = injector(function () {
+			return true;
+		}, function (callback, data) {
+			callback(null, data.toString() + ' second');
+		});
+
+		var app = connect().use(first).use(second).use(function (req, res) {
+			res.writeHead(200, { 'Content-Type': 'text/plain' });
+			res.end('Hello');
+		});
+
+		var server = app.listen(9999).on('listening', function () {
+			var expected = 'Hello first second';
+			request('http://localhost:9999', function (error, response, body) {
+				should.not.exist(error);
+				response.headers['content-type'].should.equal('text/plain');
+				parseInt(response.headers['content-length']).should.equal(expected.length);
+				body.should.equal(expected);
+				server.close(done);
+			});
+		});
 	});
 });

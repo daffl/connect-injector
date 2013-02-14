@@ -2,6 +2,8 @@
 
 A middleware to inject content into any HTTP response.
 
+[![Build Status](https://travis-ci.org/daffl/connect-injector.png?branch=master)](https://travis-ci.org/daffl/connect-injector)
+
 ## Getting Started
 
 Install the module with: `npm install connect-injector`
@@ -14,8 +16,8 @@ The basic API looks like this:
 var inject = require('connect-injector');
 
 inject(function when(req, res) {
-  // return whether or not to enable injecting
   // for this request and repsonse
+  // return whether or not to enable injecting
 }, function converter(callback, content, req, res) {
   callback // (error, data) with the injected data
   content // the entire response buffer
@@ -43,6 +45,13 @@ Now any `application/json` response will be wrapped into a callback if given the
 `callback=xyz` query parameter.
 
 ## Release History
+
+__0.2.0__
+
+- Allow chaining injectors
+- Unit tests and CI
+- Fixes for writing correct headers
+- Use [stream-buffers](https://github.com/samcday/node-stream-buffer) instead of concatenating
 
 __0.1.0__
 
