@@ -11,6 +11,8 @@ Install the module with: `npm install connect-injector`
 The basic API looks like this:
 
 ```javascript
+var inject = require('connect-injector');
+
 inject(function when(req, res) {
   // return whether or not to enable injecting
   // for this request and repsonse
@@ -28,9 +30,9 @@ support to any `application/json` repsonse:
 ```javascript
 var inject = injector(function(req, res) {
   var isJSON = res.getHeader('content-type').indexOf('application/json') !== -1;
-	return isJSON && req.query.callback;
+  return isJSON && req.query.callback;
 }, function(callback, data, req, res) {
-	callback(null, req.query.callback + '(' + data.toString() + ')');
+  callback(null, req.query.callback + '(' + data.toString() + ')');
 });
 
 // inject needs to be used before any middleware that writes to the response

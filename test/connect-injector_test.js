@@ -20,5 +20,4 @@ connect().use(connect.query())
 		port: 80
 	});
 })
-.use('/static', connect.static(__dirname)).listen(8000)
-.listen(8000);
+.use('/static', connect.static(__dirname + '/..')).listen(8000);
