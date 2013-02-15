@@ -168,4 +168,27 @@ describe('connect-injector', function () {
 			});
 		});
 	});
+
+	it('handles longer content properly', function(done) {
+		var inject = injector(function (req, res) {
+			return res.getHeader('content-type').indexOf('text/html') === 0;
+		}, function (callback, data) {
+			callback(null, data.toString().replace('</body>', '__injected__</body>'));
+		});
+
+		var app = connect().use(inject).use(connect.static(__dirname));
+
+		var server = app.listen(9999).on('listening', function () {
+			request('http://localhost:9999/dummycontent.html', function (error, response, body) {
+				should.not.exist(error);
+				response.headers['content-type'].indexOf('text/html').should.equal(0);
+				body.indexOf('__injected__').should.not.equal(-1);
+				request('http://localhost:9999/injector_tests.js', function (error, response, body) {
+					should.not.exist(error);
+					response.headers['content-type'].indexOf('application/javascript').should.equal(0);
+					server.close(done);
+				});
+			});
+		});
+	});
 });
