@@ -46,6 +46,10 @@ Now any `application/json` response will be wrapped into a callback if given the
 
 ## Release History
 
+__0.2.1__
+
+- Fix bug not setting `isIntercepted` properly
+
 __0.2.0__
 
 - Allow chaining injectors
