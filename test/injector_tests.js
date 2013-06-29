@@ -26,6 +26,28 @@ describe('connect-injector', function () {
 		});
 	});
 
+	it('does not mess with empty responses', function (done) {
+		var rewriter = injector(function () {
+			return false;
+		}, function () {
+			done('Should never be called');
+		});
+
+		var app = connect().use(rewriter).use(function (req, res) {
+			res.writeHead(204, {'Content-Length': '0'});
+			res.end();
+		});
+
+		var server = app.listen(9999).on('listening', function () {
+			request('http://localhost:9999', function (error, response, body) {
+				should.not.exist(error);
+				should.not.exist(body);
+				response.statusCode.should.equal(204);
+				server.close(done);
+			});
+		});
+	});
+
 	it('does some basic rewriting', function (done) {
 		var REWRITTEN = 'Hello People';
 		var rewriter = injector(function (req, res) {
