@@ -1,7 +1,7 @@
 {
   "name": "connect-injector",
   "description": "A middleware to inject content into any HTTP response.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "https://github.com/daffl/connect-injector",
   "author": {
     "name": "David Luecke",
@@ -34,10 +34,16 @@
     "should": "1.2.1",
     "request": "2.12.0",
     "http-proxy": "*",
-    "mocha": "1.8.1"
+    "mocha": "1.8.1",
+    "grunt": "~0.4.1",
+    "grunt-release": "~0.3.5"
   },
   "scripts": {
     "test": "mocha test/"
   },
-  "keywords": [ "connect", "middleware", "http" ]
+  "keywords": [
+    "connect",
+    "middleware",
+    "http"
+  ]
 }
