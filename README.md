@@ -46,6 +46,10 @@ Now any `application/json` response will be wrapped into a callback if given the
 
 ## Release History
 
+__0.2.2__
+
+- Fix handling of responses with an empty body ([#1](https://github.com/daffl/connect-injector/pull/1))
+
 __0.2.1__
 
 - Fix bug not setting `isIntercepted` properly
