@@ -37,10 +37,12 @@
     "http-proxy": "*",
     "mocha": "1.8.1",
     "grunt": "~0.4.1",
-    "grunt-release": "~0.3.5"
+    "grunt-release": "~0.3.5",
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-simple-mocha": "~0.4.0"
   },
   "scripts": {
-    "test": "mocha test/"
+    "test": "grunt"
   },
   "keywords": [
     "connect",

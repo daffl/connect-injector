@@ -122,7 +122,7 @@ describe('connect-injector', function () {
     var REWRITTEN = 'Re-written stuff';
 
     var rewriter = injector(function (req, res) {
-      return res.getHeader('content-type').indexOf('text/plain') === 0
+      return res.getHeader('content-type').indexOf('text/plain') === 0;
     }, function (callback) {
       callback(null, REWRITTEN);
     });
@@ -214,12 +214,6 @@ describe('connect-injector', function () {
   });
 
   it('works with http-proxy', function (done) {
-    var inject = injector(function (req, res) {
-      return res.getHeader('content-type').indexOf('text/html') === 0;
-    }, function (callback, data) {
-      callback(null, data.toString().replace('</body>', '__injected__</body>'));
-    });
-
     var httpProxy = require('http-proxy');
     var inject = injector(function (req, res) {
       return res.getHeader('content-type').indexOf('text/html') === 0;
