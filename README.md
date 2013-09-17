@@ -26,6 +26,8 @@ inject(function when(req, res) {
 
 ## Examples
 
+### JSONP support
+
 A very useful example for connect-inject is to add [JSONP](http://en.wikipedia.org/wiki/JSONP)
 support to any `application/json` repsonse:
 
@@ -44,7 +46,16 @@ connect().use(connect.query()).use(inject).use(/* your other middleware here */)
 Now any `application/json` response will be wrapped into a callback if given the
 `callback=xyz` query parameter.
 
+### Rewriting
+
+### Proxying and rewriting
+
 ## Release History
+
+__0.3.0__
+
+- Fix caching issues for response headers not being written if there is no body ([#3](https://github.com/daffl/connect-injector/issues/3))
+- Add GZip support ([#4](https://github.com/daffl/connect-injector/issues/4))
 
 __0.2.2__
 

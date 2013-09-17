@@ -28,7 +28,8 @@
     "connect": ">= 2.7.2",
     "underscore": ">= 1.4.4",
     "async": ">= 0.2.5",
-    "stream-buffers": ">= 0.2.3"
+    "stream-buffers": ">= 0.2.3",
+    "uberproto": "~1.1.0"
   },
   "devDependencies": {
     "should": "1.2.1",
