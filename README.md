@@ -14,8 +14,7 @@ The basic API looks like this:
 
 ```javascript
 var inject = require('connect-injector');
-
-inject(function when(req, res) {
+var middleware = inject(function when(req, res) {
   // for this request and repsonse
   // return whether or not to enable injecting
 }, function converter(callback, content, req, res) {
@@ -24,11 +23,14 @@ inject(function when(req, res) {
 });
 ```
 
+And can be used like any other Connect and Express middleware.
+You need to make sure to use the injector middleware *before* the actual content is being written.
+
 ## Examples
 
 ### JSONP support
 
-A very useful example for connect-inject is to add [JSONP](http://en.wikipedia.org/wiki/JSONP)
+A very useful example for connect-injector is to add [JSONP](http://en.wikipedia.org/wiki/JSONP)
 support to any `application/json` repsonse:
 
 ```javascript
@@ -45,6 +47,32 @@ connect().use(connect.query()).use(inject).use(/* your other middleware here */)
 
 Now any `application/json` response will be wrapped into a callback if given the
 `callback=xyz` query parameter.
+
+### Code minification
+
+```js
+var UglifyJS = require('uglify-js');
+
+// Uglify JavaScript code
+function uglify(code) {
+	var toplevel = UglifyJS.parse(code);
+
+	toplevel.figure_out_scope();
+
+	var compressor = UglifyJS.Compressor({
+		warnings: false
+	});
+	var compressed = toplevel.transform(compressor);
+
+	compressed.figure_out_scope();
+	compressed.compute_char_frequency();
+	compressed.mangle_names();
+
+	return compressed.print_to_string();
+}
+```
+
+### Rewriting proxied files
 
 ## Release History
 
