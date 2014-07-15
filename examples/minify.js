@@ -23,7 +23,7 @@ var uglify = function (code) {
 
 var inject = injector(function(req, res) {
   return res.getHeader('content-type').indexOf('application/javascript') !== -1;
-}, function(callback, data, req, res) {
+}, function(data, req, res, callback) {
   // Check the cache, uglify the code if not and add it
   if(!cache[req.url]) {
     cache[req.url] = uglify(data.toString());

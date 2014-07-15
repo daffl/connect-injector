@@ -17,9 +17,11 @@ var injector = require('connect-injector');
 var middleware = injector(function when(req, res) {
   // for this request and repsonse
   // return whether or not to enable injecting
-}, function converter(callback, content, req, res) {
-  callback // (error, data) with the injected data
+}, function converter(content, req, res, callback) {
   content // the entire response buffer
+  req // the HTTP request
+  res // the HTTP response
+  callback // (error, data) with the injected data
 });
 ```
 
@@ -38,7 +40,7 @@ var injector = require('connect-injector');
 var inject = injector(function(req, res) {
   var isJSON = res.getHeader('content-type').indexOf('application/json') !== -1;
   return isJSON && req.query.callback;
-}, function(callback, data, req, res) {
+}, function(data, req, res, callback) {
   callback(null, req.query.callback + '(' + data.toString() + ')');
 });
 
@@ -79,7 +81,7 @@ var uglify = function (code) {
 
 var inject = injector(function(req, res) {
   return res.getHeader('content-type').indexOf('application/javascript') !== -1;
-}, function(callback, data, req, res) {
+}, function(data, req, res, callback) {
   // Check the cache, uglify the code if not and add it
   if(!cache[req.url]) {
     cache[req.url] = uglify(data.toString());
@@ -106,7 +108,7 @@ var injector = require('connect-injector');
 var proxy = httpProxy.createProxyServer();
 var inject = injector(function(req, res) {
   return res.getHeader('content-type').indexOf('text/html') === 0;
-}, function(callback, data) {
+}, function(data, req, res, callback) {
   callback(null, data.toString().replace('</body>', '<p>Powered by connect-injector</p></body>'));
 });
 var proxyMiddleware = function(req, res) {
@@ -126,6 +128,10 @@ After starting the server, check `http://localhost:8080/connect-injector/dummyco
 to see the injected content.
 
 ## Release History
+
+__0.4.0__
+
+- Fix issue when using GZip and refactor to use Q and proper NodeJS callbacks ([#9](https://github.com/daffl/connect-injector/pull/9))
 
 __0.3.0__
 

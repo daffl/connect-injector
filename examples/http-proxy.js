@@ -4,7 +4,7 @@ var injector = require('../lib/connect-injector');
 var proxy = httpProxy.createProxyServer();
 var inject = injector(function(req, res) {
   return res.getHeader('content-type').indexOf('text/html') === 0;
-}, function(callback, data) {
+}, function(data, req, res, callback) {
   callback(null, data.toString().replace('</body>', '<p>Powered by connect-injector</p></body>'));
 });
 var proxyMiddleware = function(req, res) {
