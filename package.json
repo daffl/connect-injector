@@ -25,17 +25,17 @@
     "node": ">= 0.8.0"
   },
   "dependencies": {
-    "connect": ">= 2.7.2",
-    "underscore": ">= 1.4.4",
-    "async": ">= 0.2.5",
-    "stream-buffers": ">= 0.2.3",
-    "uberproto": "~1.1.0"
+    "async": "^0.2.5",
+    "connect": "^2.7.2",
+    "stream-buffers": "^0.2.3",
+    "uberproto": "^1.1.0",
+    "underscore": "^1.4.4"
   },
   "devDependencies": {
     "should": "1.2.1",
     "request": "2.12.0",
-    "http-proxy": "*",
     "mocha": "1.8.1",
+    "http-proxy": "^1.1.5",
     "grunt": "~0.4.1",
     "grunt-release": "~0.3.5",
     "grunt-contrib-jshint": "~0.6.4",
