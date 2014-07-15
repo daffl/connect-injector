@@ -50,6 +50,28 @@ Now any `application/json` response will be wrapped into a callback if given the
 
 ### Code minification
 
+```js
+var UglifyJS = require('uglify-js');
+
+// Uglify JavaScript code
+function uglify(code) {
+	var toplevel = UglifyJS.parse(code);
+
+	toplevel.figure_out_scope();
+
+	var compressor = UglifyJS.Compressor({
+		warnings: false
+	});
+	var compressed = toplevel.transform(compressor);
+
+	compressed.figure_out_scope();
+	compressed.compute_char_frequency();
+	compressed.mangle_names();
+
+	return compressed.print_to_string();
+}
+```
+
 ### Rewriting proxied files
 
 ## Release History
