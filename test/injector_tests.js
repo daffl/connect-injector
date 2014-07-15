@@ -3,6 +3,7 @@ var connect = require('connect');
 var request = require('request');
 var injector = require('./../lib/connect-injector');
 var httpProxy = require('http-proxy');
+var zlib = require('zlib');
 
 describe('connect-injector', function() {
   it('does not mess with normal requests', function(done) {
@@ -54,7 +55,7 @@ describe('connect-injector', function() {
     var rewriter = injector(function(req, res) {
       res.getHeader('content-type').should.equal('text/plain');
       return true;
-    }, function(callback) {
+    }, function(data, req, res, callback) {
       callback(null, REWRITTEN);
     });
 
@@ -80,7 +81,7 @@ describe('connect-injector', function() {
     var jsonp = injector(function(req, res) {
       var isJSON = res.getHeader('content-type').indexOf('application/json') === 0;
       return isJSON && req.query.callback;
-    }, function(callback, data, req) {
+    }, function(data, req, res, callback) {
       callback(null, req.query.callback + '(' + data.toString() + ')');
     });
 
@@ -123,14 +124,14 @@ describe('connect-injector', function() {
 
     var rewriter = injector(function(req, res) {
       return res.getHeader('content-type').indexOf('text/plain') === 0;
-    }, function(callback) {
+    }, function(data, req, res, callback) {
       callback(null, REWRITTEN);
     });
 
     var jsonp = injector(function(req, res) {
       var isJSON = res.getHeader('content-type').indexOf('application/json') === 0;
       return isJSON && req.query.callback;
-    }, function(callback, data, req) {
+    }, function(data, req, res, callback) {
       callback(null, req.query.callback + '(' + data.toString() + ')');
     });
 
@@ -164,13 +165,13 @@ describe('connect-injector', function() {
   it('chains injectors', function(done) {
     var first = injector(function() {
       return true;
-    }, function(callback, data) {
+    }, function(data, req, res, callback) {
       callback(null, data.toString() + ' first');
     });
 
     var second = injector(function() {
       return true;
-    }, function(callback, data) {
+    }, function(data, req, res, callback) {
       callback(null, data.toString() + ' second');
     });
 
@@ -193,7 +194,7 @@ describe('connect-injector', function() {
   it('handles longer content properly', function(done) {
     var inject = injector(function(req, res) {
       return res.getHeader('content-type').indexOf('text/html') === 0;
-    }, function(callback, data) {
+    }, function(data, req, res, callback) {
       callback(null, data.toString().replace('</body>', '__injected__</body>'));
     });
 
@@ -217,7 +218,7 @@ describe('connect-injector', function() {
     var proxy = httpProxy.createProxyServer();
     var inject = injector(function(req, res) {
       return res.getHeader('content-type').indexOf('text/html') === 0;
-    }, function(callback, data) {
+    }, function(data, req, res, callback) {
       callback(null, data.toString().replace('</body>', '__injected__</body>'));
     });
     var proxyMiddleware = function(req, res) {
@@ -245,7 +246,7 @@ describe('connect-injector', function() {
     var proxy = httpProxy.createProxyServer();
     var inject = injector(function(req, res) {
       return res.getHeader('content-type').indexOf('text/html') === 0;
-    }, function(callback, data) {
+    }, function(data, req, res, callback) {
       callback(null, data.toString().replace('</body>', '__injected__</body>'));
     });
     var proxyMiddleware = function(req, res) {
@@ -257,17 +258,26 @@ describe('connect-injector', function() {
 
     var proxyApp = connect().use(inject).use(proxyMiddleware);
     var proxyServer = proxyApp.listen(9989).on('listening', function() {
+      var gunzip = zlib.createGunzip();
+
       request({
-          url: 'http://localhost:9989/connect-injector/dummycontent.html',
-          headers: {
-            'Accept-Encoding': 'gzip'
-          }
-        }, function(error, response, body) {
-          should.not.exist(error);
-          response.headers['content-type'].indexOf('text/html').should.equal(0);
-          body.indexOf('__injected__').should.not.equal(-1);
-          proxyServer.close(done);
-        });
+        url: 'http://localhost:9989/connect-injector/dummycontent.html',
+        headers: {
+          'Accept-Encoding': 'gzip, deflate'
+        }
+      }).pipe(gunzip);
+
+
+      var body = "";
+
+      gunzip.on('data', function(data) {
+        body += data.toString();
+      });
+
+      gunzip.on('end', function() {
+        body.indexOf('__injected__').should.not.equal(-1);
+        proxyServer.close(done);
+      });
     });
   });
 });
