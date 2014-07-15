@@ -25,8 +25,8 @@
     "node": ">= 0.8.0"
   },
   "dependencies": {
-    "async": "^0.2.5",
     "connect": "^2.7.2",
+    "q": "^1.0.1",
     "stream-buffers": "^0.2.3",
     "uberproto": "^1.1.0",
     "underscore": "^1.4.4"
