@@ -241,7 +241,7 @@ describe('connect-injector', function() {
     });
   });
 
-  it.skip('works with http-proxy and gzipped content', function(done) {
+  it('works with http-proxy and gzipped content', function(done) {
     var proxy = httpProxy.createProxyServer();
     var inject = injector(function(req, res) {
       return res.getHeader('content-type').indexOf('text/html') === 0;
@@ -249,15 +249,20 @@ describe('connect-injector', function() {
       callback(null, data.toString().replace('</body>', '__injected__</body>'));
     });
     var proxyMiddleware = function(req, res) {
+      req.headers.host = 'daffl.github.io';
       proxy.web(req, res, {
-        target: 'http://raw.githubusercontent.com'
+        target: 'http://daffl.github.io'
       });
     };
+
     var proxyApp = connect().use(inject).use(proxyMiddleware);
     var proxyServer = proxyApp.listen(9989).on('listening', function() {
-      request('http://localhost:9989/daffl/connect-injector/master/test/dummycontent.html',
-        function(error, response, body) {
-          // console.log(body)
+      request({
+          url: 'http://localhost:9989/connect-injector/dummycontent.html',
+          headers: {
+            'Accept-Encoding': 'gzip'
+          }
+        }, function(error, response, body) {
           should.not.exist(error);
           response.headers['content-type'].indexOf('text/html').should.equal(0);
           body.indexOf('__injected__').should.not.equal(-1);
