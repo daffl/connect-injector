@@ -129,6 +129,11 @@ to see the injected content.
 
 ## Release History
 
+__0.4.1__
+
+- Fix connect-injector to work with Node 0.10.32 ([#11](https://github.com/daffl/connect-injector/pull/11))
+- Add debug messages and remove header rewriting ([#12](https://github.com/daffl/connect-injector/pull/12))
+
 __0.4.0__
 
 - Fix issue when using GZip and refactor to use Q and proper NodeJS callbacks ([#9](https://github.com/daffl/connect-injector/pull/9))
