@@ -1,2 +1,5 @@
 language: node_js
-node_js: 0.10
+node_js:
+  - 0.10.31
+  - 0.10.32
+  - 0.11
