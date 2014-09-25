@@ -36,7 +36,7 @@ describe('connect-injector', function() {
     });
 
     var app = connect().use(rewriter).use(function(req, res) {
-      res.writeHead(204, {'Content-Length': '0'});
+      res.writeHead(204);
       res.end();
     });
 
@@ -45,6 +45,28 @@ describe('connect-injector', function() {
         should.not.exist(error);
         should.not.exist(body);
         response.statusCode.should.equal(204);
+        server.close(done);
+      });
+    });
+  });
+
+  it('works with empty responses that are rewritten', function(done) {
+    var rewriter = injector(function() {
+      return true;
+    }, function() {
+      done('Should never be called');
+    });
+
+    var app = connect().use(rewriter).use(function(req, res) {
+      res.writeHead(304);
+      res.end();
+    });
+
+    var server = app.listen(9999).on('listening', function() {
+      request('http://localhost:9999', function(error, response, body) {
+        should.not.exist(error);
+        should.not.exist(body);
+        response.statusCode.should.equal(304);
         server.close(done);
       });
     });

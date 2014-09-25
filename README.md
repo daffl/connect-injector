@@ -129,6 +129,10 @@ to see the injected content.
 
 ## Release History
 
+__0.4.2__
+
+- Fix for empty responses not trying to be rewritten ([#13](https://github.com/daffl/connect-injector/issues/13), [#14](https://github.com/daffl/connect-injector/pull/14))
+
 __0.4.1__
 
 - Fix connect-injector to work with Node 0.10.32 ([#11](https://github.com/daffl/connect-injector/pull/11))
