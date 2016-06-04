@@ -1,3 +1,5 @@
+'use strict';
+
 var should = require('should');
 var connect = require('connect');
 var request = require('request');
