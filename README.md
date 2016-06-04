@@ -127,48 +127,6 @@ proxyApp.listen(8080);
 After starting the server, check `http://localhost:8080/connect-injector/dummycontent.html`
 to see the injected content.
 
-## Release History
-
-__0.4.2__
-
-- Fix for empty responses not trying to be rewritten ([#13](https://github.com/daffl/connect-injector/issues/13), [#14](https://github.com/daffl/connect-injector/pull/14))
-
-__0.4.1__
-
-- Fix connect-injector to work with Node 0.10.32 ([#11](https://github.com/daffl/connect-injector/pull/11))
-- Add debug messages and remove header rewriting ([#12](https://github.com/daffl/connect-injector/pull/12))
-
-__0.4.0__
-
-- Fix issue when using GZip and refactor to use Q and proper NodeJS callbacks ([#9](https://github.com/daffl/connect-injector/pull/9))
-
-__0.3.0__
-
-- Injector works with HTTP proxy and GZipped content ([#4](https://github.com/daffl/connect-injector/pull/4), [#7](https://github.com/daffl/connect-injector/pull/7), [#8](https://github.com/daffl/connect-injector/pull/8))
-
-__0.2.3__
-
-- Fix caching issues for response headers not being written if there is no body ([#3](https://github.com/daffl/connect-injector/issues/3))
-
-__0.2.2__
-
-- Fix handling of responses with an empty body ([#1](https://github.com/daffl/connect-injector/pull/1))
-
-__0.2.1__
-
-- Fix bug not setting `isIntercepted` properly
-
-__0.2.0__
-
-- Allow chaining injectors
-- Unit tests and CI
-- Fixes for writing correct headers
-- Use [stream-buffers](https://github.com/samcday/node-stream-buffer) instead of concatenating
-
-__0.1.0__
-
-- Initial alpha release
-
 ## License
 
 Copyright (c) 2016 David Luecke  
