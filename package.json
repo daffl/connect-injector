@@ -1,7 +1,7 @@
 {
   "name": "connect-injector",
   "description": "A middleware to inject content into any HTTP response.",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "homepage": "https://github.com/daffl/connect-injector",
   "author": {
     "name": "David Luecke",
