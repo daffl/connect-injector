@@ -171,5 +171,5 @@ __0.1.0__
 
 ## License
 
-Copyright (c) 2013 David Luecke  
+Copyright (c) 2016 David Luecke  
 Licensed under the MIT license.
