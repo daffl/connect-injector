@@ -2,7 +2,7 @@
 
 A middleware to inject content into any HTTP response.
 
-[![Build Status](https://travis-ci.org/daffl/connect-injector.png?branch=master)](https://travis-ci.org/daffl/connect-injector)
+[![Build Status](https://travis-ci.org/daffl/connect-injector.png?branch=master)](https://travis-ci.org/daffl/connect-injector) [![Greenkeeper badge](https://badges.greenkeeper.io/daffl/connect-injector.svg)](https://greenkeeper.io/)
 
 ## Getting Started
 
